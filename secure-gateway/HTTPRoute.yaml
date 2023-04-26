@@ -1,0 +1,28 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+  kind: HTTPRoute
+  metadata:
+    name: httpbin
+    namespace: default
+  spec:
+    hostnames:
+    - httpbin.example.com
+    parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: httpgateway
+      namespace: istio-system
+    rules:
+    - backendRefs:
+      - group: ""
+        kind: Service
+        name: httpbin
+        port: 8000
+        weight: 1
+      matches:
+      - path:
+          type: PathPrefix
+          value: /status
+      - path:
+          type: PathPrefix
+          value: /delay
+
